@@ -18,7 +18,7 @@ class App {
 
   public initRoutes() {
     const routesPaths = fg.sync(
-      join(__dirname, "../", "domains", "*/routes.ts")
+      join(__dirname, "..", "domains", "*", "routes.ts")
     );
 
     for (const routePath of routesPaths) {
