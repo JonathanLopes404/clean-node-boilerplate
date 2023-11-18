@@ -1,14 +1,14 @@
-import Route from "@protocols/route";
-import Bill from "./controllers/bill";
+import Route from "@protocols/route"
+import Bill from "./controllers/bill"
 
-const controller = new Bill();
+const controller = new Bill()
 
 const routes: Route[] = [
   {
-    path: "/",
-    handle: controller.new,
-    method: "get",
+    path: "/bill",
+    handler: controller.new,
+    method: "post",
   },
-];
+]
 
-export default routes;
+export default routes
