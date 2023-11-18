@@ -1,21 +1,23 @@
-import express, { Express } from "express"
 import fg from "fast-glob"
 import { join } from "node:path"
 import Router from "@protocols/router"
 import ExpressRouterAdapter from "./adapters/express-router"
 import Route from "@protocols/route"
+import WebAppFramework from "@protocols/web-app-framework"
+import ExpressAdapter from "./adapters/express-adapter"
 
 interface AppDependencies {
   router: Router
+  webAppFramework: WebAppFramework
 }
 
 class App {
-  private _app: Express
+  private _app: WebAppFramework
   private router: Router
 
   constructor(dependencies: AppDependencies) {
-    this._app = express()
     this.router = dependencies.router
+    this._app = dependencies.webAppFramework
 
     this.initRoutes()
     this.initMiddlewares()
@@ -34,7 +36,7 @@ class App {
   }
 
   public initMiddlewares() {
-    this._app.use(this.router.getRouter())
+    this._app.addMiddleware(this.router.getRouter())
   }
 
   public listen(port: number, callback?: (() => void) | undefined): void {
@@ -44,4 +46,5 @@ class App {
 
 export default new App({
   router: new ExpressRouterAdapter(),
+  webAppFramework: new ExpressAdapter(),
 })
