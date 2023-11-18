@@ -1,10 +1,9 @@
 import fg from "fast-glob"
 import { join } from "node:path"
 import Router from "@protocols/router"
-import ExpressRouterAdapter from "./adapters/express-router"
 import Route from "@protocols/route"
 import WebAppFramework from "@protocols/web-app-framework"
-import ExpressAdapter from "./adapters/express-adapter"
+import config from "./config/app"
 
 interface AppDependencies {
   router: Router
@@ -45,6 +44,6 @@ class App {
 }
 
 export default new App({
-  router: new ExpressRouterAdapter(),
-  webAppFramework: new ExpressAdapter(),
+  router: config.router,
+  webAppFramework: config.webAppFramework,
 })
