@@ -1,9 +1,7 @@
-import ExpressAdapter from "@main/adapters/express-adapter"
-import ExpressRouterAdapter from "@main/adapters/express-router"
+import ExpressAdapter from "@main/adapters/express/express-adapter"
 
 const config = {
   webAppFramework: new ExpressAdapter(),
-  router: new ExpressRouterAdapter(),
 }
 
 export default config

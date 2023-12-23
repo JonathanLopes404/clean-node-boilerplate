@@ -1,49 +1,73 @@
+import "reflect-metadata"
+
 import fg from "fast-glob"
 import { join } from "node:path"
-import Router from "@protocols/router"
-import Route from "@protocols/route"
-import WebAppFramework from "@protocols/web-app-framework"
+import type Route from "@shared/protocols/route"
+import type WebAppFramework from "@shared/protocols/web-app-framework"
 import config from "./config/app"
 
 interface AppDependencies {
-  router: Router
   webAppFramework: WebAppFramework
 }
 
 class App {
-  private _app: WebAppFramework
-  private router: Router
+  private readonly _app: WebAppFramework
 
   constructor(dependencies: AppDependencies) {
-    this.router = dependencies.router
     this._app = dependencies.webAppFramework
 
-    this.initRoutes()
-    this.initMiddlewares()
+    void this.initMiddlewares()
+      .then(async () => {
+        await this.registerModuleDependencies()
+      })
+      .then(() => {
+        this.initRoutes()
+      })
   }
 
-  public initRoutes() {
-    const routesPaths = fg.sync(
-      join(__dirname, "..", "domains", "*", "routes.ts")
-    )
+  private initRoutes(): void {
+    const routesPaths = fg.sync(join(__dirname, "..", "modules", "*", "routes.ts"))
 
     for (const routePath of routesPaths) {
-      import(routePath).then(({ default: routes }) => {
-        routes.map((route: Route) => this.router.addRoute(route))
+      void import(routePath).then(({ default: routes }) => {
+        routes.forEach((route: Route) => {
+          this._app.addRoute(route)
+        })
+      })
+    }
+
+    this._app.initRouter()
+  }
+
+  private async registerModuleDependencies(): Promise<void> {
+    const registers = fg.sync(join(__dirname, "..", "modules", "*", "dependencies.ts"))
+
+    await Promise.all(registers.map(async (register) => await import(register)))
+  }
+
+  private async initMiddlewares(): Promise<void> {
+    const middlwaresPaths = fg.sync(join(__dirname, "middlewares", "*.ts"))
+
+    for (const path of middlwaresPaths) {
+      await import(path).then(({ default: middleware }) => {
+        this._app.addMiddleware(middleware())
       })
     }
   }
 
-  public initMiddlewares() {
-    this._app.addMiddleware(this.router.getRouter())
+  public addRoute(route: Route): void {
+    this._app.addRoute(route)
   }
 
   public listen(port: number, callback?: (() => void) | undefined): void {
     this._app.listen(port, callback)
   }
+
+  public close(): void {
+    this._app.close()
+  }
 }
 
 export default new App({
-  router: config.router,
   webAppFramework: config.webAppFramework,
 })
