@@ -1,18 +1,17 @@
 import type Controller from "@shared/protocols/controller"
-import type HttpRequest from "@shared/protocols/http-request"
-import type HttpResponse from "@shared/protocols/http-response"
 import validations from "./validations"
 import { injectable } from "tsyringe"
-import { badRequest, ok } from "@shared/helpers/http"
+import { type Output } from "@shared/protocols/controller"
+import { error, success } from "@shared/helpers/controller"
 
 @injectable()
 export default class ExampleController implements Controller {
-  public async handle(request: HttpRequest): Promise<HttpResponse> {
-    const validatonErrors = validations.handle(request)
+  public async handle(input: any): Promise<Output> {
+    const validatonErrors = validations.handle(input)
     if (validatonErrors.length > 0) {
-      return badRequest(validatonErrors.shift()!)
+      return error(validatonErrors.shift()!)
     }
 
-    return ok("Hello world")
+    return success("Hello world")
   }
 }

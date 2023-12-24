@@ -1,4 +1,4 @@
-import container from "@shared/container"
+import container from "@infra/container"
 
 // Use Cases
 // Container registrations here

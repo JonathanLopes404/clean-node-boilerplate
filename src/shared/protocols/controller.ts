@@ -1,6 +1,16 @@
-import type HttpRequest from "./http-request"
-import type HttpResponse from "./http-response"
+export interface SuccessOutput {
+  status: "success"
+  data: any
+}
+
+export interface ErrorOutput {
+  status: "error"
+  message: string
+  error: Error
+}
+
+export type Output = SuccessOutput | ErrorOutput
 
 export default interface Controller {
-  handle: (request: HttpRequest) => Promise<HttpResponse>
+  handle: (input: any) => Promise<Output>
 }

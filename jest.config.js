@@ -12,12 +12,11 @@ module.exports = {
   coverageProvider: "v8",
   coverageReporters: ["lcov"],
   modulePaths: [compilerOptions.baseUrl],
-  moduleNameMapper: pathsToModuleNameMapper(
-    compilerOptions.paths /* { prefix: '<rootDir>/' } */
-  ),
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   rootDir: ".",
   roots: ["./src", "<rootDir>/tests"],
   transform: {
     "^.+\\.ts$": "@swc/jest",
   },
+  setupFilesAfterEnv: ["<rootDir>/testSetupFile.js"],
 }

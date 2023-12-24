@@ -8,7 +8,9 @@
     "paths": {
       "@main/*": ["src/main/*"],
       "@shared/*": ["src/shared/*"],
-      "@modules/*": ["src/modules/*"]
+      "@infra/*": ["src/infra/*"],
+      "@modules/*": ["src/modules/*"],
+      "@tests/*": ["tests/*"]
     },
     "allowJs": true,                                  
     "outDir": "./dist",                                   

@@ -1,7 +1,5 @@
-import type HttpRequest from "@shared/protocols/http-request"
-
 const validations = {
-  handle: (request: HttpRequest): Error[] => {
+  handle: (input: any): Error[] => {
     const errors: Error[] = []
 
     return errors

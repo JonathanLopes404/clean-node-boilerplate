@@ -1,6 +1,6 @@
-import type Route from "@shared/protocols/route"
-import container from "@shared/container"
-import ExampleController from "./controllers/example"
+import type Route from "@infra/http/protocols/route"
+import container from "@infra/container"
+import ExampleController from "@modules/example/controllers/example"
 
 const exampleController = container.resolve(ExampleController)
 
