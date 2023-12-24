@@ -1,5 +1,5 @@
 import { type Output } from "@shared/protocols/controller"
-import { type RouteHandler } from "@shared/protocols/route"
+import { type RouteHandler } from "@infra/http/protocols/route"
 import { type Request, type RequestHandler, type Response } from "express"
 
 export default function expressRouteHandlerAdapter(routeHandler: RouteHandler): RequestHandler {
