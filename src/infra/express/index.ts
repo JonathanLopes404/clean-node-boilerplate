@@ -1,12 +1,11 @@
 import type Route from "@infra/http/protocols/route"
-import type AppFramework from "@infra/protocols/app-framework"
 import express, { Router, type Express } from "express"
 import { type Server } from "http"
 import expressRouteHandlerAdapter from "./express-route-handler"
 import fg from "fast-glob"
 import { join } from "node:path"
 
-export default class ExpressAdapter implements AppFramework {
+export default class ExpressApplication {
   public readonly express: Express
   private readonly _router: Router
   private server: Server
@@ -17,13 +16,7 @@ export default class ExpressAdapter implements AppFramework {
   }
 
   public async init(): Promise<void> {
-    await Promise.all([this.registerContainerDependencies(), this.initMiddlewares(), this.initRoutes()])
-  }
-
-  private async registerContainerDependencies(): Promise<void> {
-    const registers = fg.sync(join(__dirname, "..", "container", "registers", "*.ts"))
-
-    await Promise.all(registers.map(async (register) => await import(register)))
+    await Promise.all([this.initMiddlewares(), this.initRoutes()])
   }
 
   public addMiddleware(middleware: any): void {

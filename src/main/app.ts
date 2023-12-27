@@ -1,28 +1,12 @@
 import "reflect-metadata"
 
-import type AppFramework from "@infra/protocols/app-framework"
-import config from "./config/app"
+import type ExpressApplication from "@infra/express"
+import container, { registerContainerDependencies } from "@infra/container"
 
-interface AppDependencies {
-  appFramework: AppFramework
+async function bootstrap(): Promise<void> {
+  await registerContainerDependencies()
+  const app = container.resolve<ExpressApplication>("Application")
+  await app.run()
 }
 
-class App {
-  private readonly _app: AppFramework
-
-  constructor(dependencies: AppDependencies) {
-    this._app = dependencies.appFramework
-  }
-
-  public async run(callback?: (() => void) | undefined): Promise<void> {
-    await this._app.run(callback)
-  }
-
-  public close(): void {
-    this._app.close()
-  }
-}
-
-export default new App({
-  appFramework: config.appFramework,
-})
+void bootstrap()

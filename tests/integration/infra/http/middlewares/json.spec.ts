@@ -1,13 +1,15 @@
-import { success } from "@shared/helpers/controller"
-import { type Output } from "@shared/protocols/controller"
-import ExpressAdapter from "@infra/express/express-adapter"
+import type ExpressApplication from "@infra/express"
 import request from "supertest"
+import container from "@infra/container"
+import type HttpRequest from "@infra/http/protocols/http-request"
+import type HttpResponse from "@infra/http/protocols/http-response"
+import { ok } from "@infra/http/helpers"
 
 describe("JSON Middleware Test", () => {
-  let _app: ExpressAdapter
+  let _app: ExpressApplication
 
   beforeAll(async () => {
-    _app = new ExpressAdapter()
+    _app = container.resolve<ExpressApplication>("Application")
     await _app.init()
   })
 
@@ -15,8 +17,8 @@ describe("JSON Middleware Test", () => {
     _app.addRoute({
       path: "/test_parse_json",
       method: "post",
-      handler: async (input: any): Promise<Output> => {
-        return success(input)
+      handler: async (request: HttpRequest): Promise<HttpResponse> => {
+        return ok(request.body)
       },
     })
 

@@ -21,7 +21,7 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "dev": "tsx --watch src/main/index.ts",
+    "dev": "tsx --watch src/main/app.ts",
     "test": "jest",
     "test:watch": "npm run test -- --watch",
     "lint": "eslint --fix --ext .ts ."
