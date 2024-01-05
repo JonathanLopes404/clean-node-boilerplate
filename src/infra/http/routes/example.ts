@@ -7,7 +7,7 @@ const exampleController = container.resolve(ExampleController)
 const routes: Route[] = [
   {
     path: "/",
-    handler: async (...args) => await exampleController.handle.apply(exampleController, args),
+    handler: exampleController.handle.bind(exampleController),
     method: "get",
   },
 ]
