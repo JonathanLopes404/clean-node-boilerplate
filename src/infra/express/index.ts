@@ -28,7 +28,7 @@ export default class ExpressApplication {
   }
 
   private async initRoutes(): Promise<void> {
-    const routesPaths = fg.sync(join(__dirname, "..", "http", "routes", "*.ts"))
+    const routesPaths = fg.sync(join(__dirname, "..", "http", "routes", "*.@(js|ts)"))
 
     for (const routePath of routesPaths) {
       await import(routePath).then(({ default: routes }) => {
@@ -43,7 +43,7 @@ export default class ExpressApplication {
 
   private async initMiddlewares(): Promise<void> {
     const middlwaresPaths = fg
-      .sync(join(__dirname, "..", "http", "middlewares", "*.ts"))
+      .sync(join(__dirname, "..", "http", "middlewares", "*.@(js|ts)"))
       .filter((path) => !path.endsWith(".test.ts"))
 
     for (const path of middlwaresPaths) {
