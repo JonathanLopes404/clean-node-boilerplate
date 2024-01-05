@@ -42,7 +42,9 @@ export default class ExpressApplication {
   }
 
   private async initMiddlewares(): Promise<void> {
-    const middlwaresPaths = fg.sync(join(__dirname, "..", "http", "middlewares", "*.ts"))
+    const middlwaresPaths = fg
+      .sync(join(__dirname, "..", "http", "middlewares", "*.ts"))
+      .filter((path) => !path.endsWith(".test.ts"))
 
     for (const path of middlwaresPaths) {
       await import(path).then(({ default: middleware }) => {
