@@ -23,7 +23,7 @@ export function badRequest(error: Error): HttpResponse {
 
 export function serverError(error: Error): HttpResponse {
   return {
-    statusCode: 400,
+    statusCode: 500,
     body: {
       status: "error",
       message: "Ocorreu um erro inesperado",
